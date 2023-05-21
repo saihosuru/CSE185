@@ -14,3 +14,4 @@ We are going to compare it with makeTagdirectory and comparing the resuts to IGV
 
 1) Since Tagdirectories take in BAM files, could we make our tool with input as SAM file instead of BAM file
 2) How to work with BAM files, 
+3) use BWA MEM and tried to use our own method for makeTagDir
