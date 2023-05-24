@@ -40,8 +40,26 @@ def TrieConstruction(Patterns):
 patterns = []
 pattern_count = {}
 f = "test.txt"
-
+fast="test_example_from_Klf4.txt"
+'''
 with open(f,'r') as file:
     for line in file:
         temp = line.strip()
         patterns.append(temp)
+'''
+with open(fast,"r") as file:
+    lines= file.readlines()
+    for i in range(0, len(lines), 4):
+            # Extract the four lines for each record
+            header = lines[i].rstrip()
+            sequence = lines[i+1].rstrip()
+            separator = lines[i+2].rstrip()
+            quality = lines[i+3].rstrip()
+
+            # Process the data for each record as needed
+            #print("Header:", header)
+            print("Sequence:", sequence)
+            #print("Separator:", separator)
+            #print("Quality:", quality)
+            patterns.append(sequence)
+print(TrieConstruction(patterns))
