@@ -45,3 +45,46 @@ with open(f,'r') as file:
     for line in file:
         temp = line.strip()
         patterns.append(temp)
+
+
+
+
+
+
+
+
+
+
+
+
+def final(start_pos,list_of_patterns,diction):
+    Aho_Trie = TrieConstruction(list_of_patterns)
+    l = start_pos
+    c = l
+    v = 0
+    final_l = len(combined_lines)
+    while l < final_l:
+        present = False
+        if c >= final_l:
+            l = l + 1
+            c = l
+            v = 0
+            continue
+        for elem in Aho_Trie[v]:
+            if elem[1] == combined_lines[c]:
+                v = elem[0]
+                c += 1
+                present = True
+                if elem[2] == True:
+                    diction[elem[3]] += 1
+                    l = l + 1
+                    c = l
+                    v = 0
+                break
+
+        if present == False:
+            l = l + 1
+            c = l
+            v = 0
+        else:
+            continue
