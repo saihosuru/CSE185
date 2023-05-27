@@ -1,17 +1,33 @@
-# CSE185
-Group Project 
+# README
+SEAG is a command line tool for producing DNA sequence alignment data on single-ended DNA. It takes as input two files. One file contains a long reference genome sequence while the other file contains many reads, or short fragments of DNA that will be aligned to the genome sequence.
 
-#cat ~/public/lab7/lab7_accessions.txt | xargs -I {} sh -c 'wget -O - "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id={}&rettype=fasta&retmode=text" | awk "{if (NR==1) print \">{}\"; else print}"' > ~/lab7/lab7_virus_genomes.fa
-
-
-
-Tool: Make TagDirectory , input : Bam files , 
-
-output: doing lots of preprocessing steps: removing reads that do not align to a unique position in the genome, separating reads by chromosome and sorting them by position, calculating how often reads appear in the same position to estimate the clonality (i.e. PCR duplication), calculating the relative distribution of reads relative to one another to estimate the ChIP-fragment length, calculating sequence properties and GC-content of the reads and performing a simple enrichment calculation to check if the experiment looks like a ChIP-seq experiment
+The reads can come from any kind of sequencing experiment (e.g. ATACSeq, ChIP-Seq) as long as both the genome sequence and reads are DNA/cDNA sequences.
 
 
-We are going to compare it with makeTagdirectory and comparing the resuts to IGV
+### Authors:
+Srijan Chakraborty
 
-1) Since Tagdirectories take in BAM files, could we make our tool with input as SAM file instead of BAM file
-2) How to work with BAM files, 
-3) use BWA MEM and tried to use our own method for makeTagDir
+Hanzhong Yang
+
+Sai Hosuru
+
+*Each author has played an equal role in the development of the software.*
+
+### Usage
+$ python3 SEAG <refGenome.fa/fasta> <fragments.fq/fastq> (outputFileName.sam)
+
+###### Inputs
+Reference genome (must be a fasta file ending in ".fa" or ".fasta")
+Read fragments (must be a fastq file ending in ".fq" or ".fastq")
+OPTIONAL: Output file name (must be a .sam file)
+
+###### Output
+Default output will be "out.sam", unless output file name is specified.
+
+
+### Required Packages
+pyfaidx
+
+###### Installation Instructions
+In command line on UNIX, enter:
+"pip install pyfaidx"
