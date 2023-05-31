@@ -313,4 +313,3 @@ fasta.close()
 
 
 # Step: Output columns to SAM file with proper formatting.
-
