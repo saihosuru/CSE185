@@ -55,7 +55,7 @@
 import sys, argparse
 #print(len(sys.argv))
 ### Return error message if not appropriate arguments
-if not (len(sys.argv) == 3):
+if not (len(sys.argv) == 3 or len(sys.argv) == 4):
     print("USAGE ERROR: appropriate number of input files not present.")
     print("Usage: python3 SAMGenerator.py <genome.fa/.fasta> <reads1.fq/.fastq> (reads2.fq/fastq)")
     sys.exit(1)
@@ -189,7 +189,13 @@ def TrieConstruction(Patterns):
 
 
 # Step: Read Files
-output = open("output.sam", "w")
+output = ''
+if (len(sys.argv) == 4):
+    output = open(argv[3], "w")
+else:
+    output = open("output.sam", "w")
+
+
 
 with open(fqFiles[2],"r") as file:
     
