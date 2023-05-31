@@ -60,7 +60,7 @@ if not (len(sys.argv) == 3 or len(sys.argv) == 4):
     print("Usage: python3 SAMGenerator.py <genome.fa/.fasta> <reads1.fq/.fastq> (outputfile.sam)")
     sys.exit(1)
 
-if (len(sys.argv) == 4)):
+if (len(sys.argv) == 4):
     if not (sys.argv[3][-4:] == '.sam'):
         print("USAGE ERROR: output file name does not end in \'.sam\'. ")
         print("Usage: python3 SAMGenerator.py <genome.fa/.fasta> <reads1.fq/.fastq> (outputfile.sam)")
