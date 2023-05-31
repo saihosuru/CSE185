@@ -26,7 +26,7 @@ Default output will be "out.sam", unless output file name is specified.
 
 
 ### Required Packages
-pyfaidx
+pyfaidx - to read FASTA files and get sequences for each chromosome.
 
 ###### Installation Instructions
 In command line on UNIX, enter:
