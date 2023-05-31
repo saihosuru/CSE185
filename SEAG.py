@@ -57,10 +57,14 @@ import sys, argparse
 ### Return error message if not appropriate arguments
 if not (len(sys.argv) == 3 or len(sys.argv) == 4):
     print("USAGE ERROR: appropriate number of input files not present.")
-    print("Usage: python3 SAMGenerator.py <genome.fa/.fasta> <reads1.fq/.fastq> (reads2.fq/fastq)")
+    print("Usage: python3 SAMGenerator.py <genome.fa/.fasta> <reads1.fq/.fastq> (outputfile.sam)")
     sys.exit(1)
 
-
+if (len(sys.argv) == 4)):
+    if not (sys.argv[3][-4:] == '.sam'):
+        print("USAGE ERROR: output file name does not end in \'.sam\'. ")
+        print("Usage: python3 SAMGenerator.py <genome.fa/.fasta> <reads1.fq/.fastq> (outputfile.sam)")
+        sys.exit(1)
     
 #Copy filenames into an array of filenames to be opened sequentially
 fqFiles = []
@@ -191,7 +195,7 @@ def TrieConstruction(Patterns):
 # Step: Read Files
 output = ''
 if (len(sys.argv) == 4):
-    output = open(argv[3], "w")
+    output = open(sys.argv[3], "w")
 else:
     output = open("output.sam", "w")
 
