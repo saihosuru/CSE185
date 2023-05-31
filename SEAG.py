@@ -113,21 +113,6 @@ print("Files are valid and they do exist.")
 output = open("output.sam", "w")
 
 with open(fqFiles[1],"r") as file:
-    #lines= file.readlines()
-    '''for i in range(0, len(lines), 4):
-                # Extract the four lines for each record
-            header = lines[i].rstrip()
-            sequence = lines[i+1].rstrip()
-            separator = lines[i+2].rstrip()
-            quality = lines[i+3].rstrip()
-
-                # Process the data for each record as needed
-            print("Header:", header)
-            print("Sequence:", sequence)
-            #print("Separator:", separator)
-            print("Quality:", quality)
-            patterns.append(sequence)
-    '''
     
     #initialize data buffers
     line1 = ''
@@ -259,7 +244,13 @@ fasta = Fasta("GRCm38.fa")
 header= '>1 dna:chromosome chromosome:GRCm38:1:1:195471971:1 REF'
 #sequence_1 = fasta[header].seq
 #chromosome_1 = fasta['>1 dna:chromosome chromosome:GRCm38:1:1:195471971:1 REF']
-chromosomes = ['1','10','11','12','13','14','15','16','17','18','19','2','3','4','5','6','7','8','9','MT','X','Y']
+chromos = fasta.keys()
+chromosomes = []
+for key in chromos:
+    if len(key) >= 3:
+        continue
+    else:
+        chromosomes.append(key)
 
 sam_file = "output.sam"
 import pysam
@@ -284,8 +275,7 @@ for chro in chromosomes:
                 c += 1
                 present = True
                 if elem[2] == True:
-                    print(elem[3])
-                    print(l)
+                    output.write(str(elem[3][0]) + "\t" +str(elem[3][1]) + "\t" + str(elem[3][2]) + "\t" + "Position: " + str(l)+ "\n")
                     l = l + 1
                     c = l
                     v = 0
@@ -297,7 +287,8 @@ for chro in chromosomes:
         else:
             continue
 
-
+output.close()
+fasta.close()
 # In[ ]:
 
 
