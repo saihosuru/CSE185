@@ -53,9 +53,9 @@
 
 
 import sys, argparse
-
+#print(len(sys.argv))
 ### Return error message if not appropriate arguments
-if not (len(sys.argv) == 2):
+if not (len(sys.argv) == 3):
     print("USAGE ERROR: appropriate number of input files not present.")
     print("Usage: python3 SAMGenerator.py <genome.fa/.fasta> <reads1.fq/.fastq> (reads2.fq/fastq)")
     sys.exit(1)
@@ -81,24 +81,24 @@ for i in range(len(sys.argv)):
 import os 
 
 #Checks if the Genome file exists in the path 
-if not os.path.exists(fqFiles[0]):
+if not os.path.exists(fqFiles[1]):
     print("File path does not contain this Genome File")
     sys.exit(1)
     
 #Checks if the Genome file ends with .fa to see if its a fasta file 
 
-if not (fqFiles[0].lower().endswith(".fa") or fqFiles[0].lower().endswith(".fa")):
+if not (fqFiles[1].lower().endswith(".fasta") or fqFiles[1].lower().endswith(".fa")):
     print("Genome File is not a FASTA file.")
     sys.exit(1)
 
 #For the remaining input 
     # Check if the read file exists in the path 
-if not os.path.exists(fqFiles[1]):
+if not os.path.exists(fqFiles[2]):
     print("Read File path does not contain the file")
     sys.exit(1)
 
     # Check if the read file ends with .fastq
-if not (fqFiles[1].lower().endswith(".fastq") or fqFiles[1].lower().endswith(".fq")):
+if not (fqFiles[2].lower().endswith(".fastq") or fqFiles[2].lower().endswith(".fq")):
     print("The Read File is not a FASTQ file.")
     sys.exit(1)
 
@@ -107,47 +107,6 @@ print("Files are valid and they do exist.")
 
 
 # In[ ]:
-
-
-# Step: Read Files
-output = open("output.sam", "w")
-
-with open(fqFiles[1],"r") as file:
-    
-    #initialize data buffers
-    line1 = ''
-    line2 = ''
-    line3 = ''
-    line4 = ''
-    
-    #while there is still more data in the file
-    Trie = {}
-    All_info=[]
-    while(line1 := file.readline()):
-        
-        #replacement conditional:
-        
-        
-        #input data into buffers
-        line2 = file.readline()
-        line3 = file.readline()
-        line4 = file.readline()
-        
-        #format the buffer data into different datatypes.
-        header = line1.rstrip()
-        sequence = line2.rstrip()
-        separator = line3.rstrip()
-        quality = line4.rstrip()
-        my_tuple = (header, sequence,quality)
-        All_info.append(my_tuple)
-    Anwser=TrieConstrution(All_info)
-    print(Answer)
-
-
-# In[ ]:
-
-
-################################################################################
 
 def TrieConstruction(Patterns):
     ''' 
@@ -229,6 +188,47 @@ def TrieConstruction(Patterns):
     return Trie
 
 
+# Step: Read Files
+output = open("output.sam", "w")
+
+with open(fqFiles[2],"r") as file:
+    
+    #initialize data buffers
+    line1 = ''
+    line2 = ''
+    line3 = ''
+    line4 = ''
+    
+    #while there is still more data in the file
+    Trie = {}
+    All_info=[]
+    while(line1 := file.readline()):
+        
+        #replacement conditional:
+        
+        
+        #input data into buffers
+        line2 = file.readline()
+        line3 = file.readline()
+        line4 = file.readline()
+        
+        #format the buffer data into different datatypes.
+        header = line1.rstrip()
+        sequence = line2.rstrip()
+        separator = line3.rstrip()
+        quality = line4.rstrip()
+        my_tuple = (header, sequence,quality)
+        All_info.append(my_tuple)
+    Answer=TrieConstruction(All_info)
+    #print(Answer)
+
+
+# In[ ]:
+
+
+################################################################################
+
+
 # In[ ]:
 
 
@@ -240,24 +240,25 @@ def TrieConstruction(Patterns):
 
 # Step: Generate Alignment
 from pyfaidx import Fasta
-fasta = Fasta("GRCm38.fa")
-header= '>1 dna:chromosome chromosome:GRCm38:1:1:195471971:1 REF'
-#sequence_1 = fasta[header].seq
-#chromosome_1 = fasta['>1 dna:chromosome chromosome:GRCm38:1:1:195471971:1 REF']
+fa = str(fqFiles[1])
+fasta = Fasta(fa)
 chromos = fasta.keys()
+#print(chromos)
 chromosomes = []
-for key in chromos:
-    if len(key) >= 3:
+'''for key in chromos:
+    temp = key
+    if 'chr' in key:
+        temp = key.replace("chr","")
+    if len(temp) >= 3:
         continue
     else:
-        chromosomes.append(key)
-
-sam_file = "output.sam"
-import pysam
-
+        chromosomes.append(temp)
+'''
+chromosomes = chromos
 Aho_Trie = Answer
 for chro in chromosomes:
     sequence = str(fasta[chro])
+    sequence = sequence.upper()
     final_l = len(sequence)
     l = 0
     c = l
@@ -275,7 +276,10 @@ for chro in chromosomes:
                 c += 1
                 present = True
                 if elem[2] == True:
-                    output.write(str(elem[3][0]) + "\t" +str(elem[3][1]) + "\t" + str(elem[3][2]) + "\t" + "Position: " + str(l)+ "\n")
+                    for tup in elem[3]:
+                        print("Found Match for:  ", tup)
+                        output.write(str(tup[0]) + "\t" +str(tup[1]) + "\t" + str(tup[2]) + "\t" +  str(chro) + "\t"
+                        + str(l)+"\n")
                     l = l + 1
                     c = l
                     v = 0
