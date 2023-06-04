@@ -288,8 +288,9 @@ for chro in chromosomes:
                 if elem[2] == True:
                     for tup in elem[3]:
                         print("Found Match for:  ", tup)
+                        tt = l + 1
                         output.write(str(tup[0]) + "\t" +str(tup[1]) + "\t" + str(tup[2]) + "\t" +  str(chro) + "\t"
-                        + str(l)+"\n")
+                        + str(tt)+"\n")
                     l = l + 1
                     c = l
                     v = 0
