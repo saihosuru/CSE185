@@ -36,7 +36,7 @@ pyfaidx - to read FASTA files and get sequences for each chromosome.
 In command line on UNIX, enter:
 "pip install pyfaidx"
 
-###### Benchmarking
+### Benchmarking
 We are currently conducting a benchmark analysis of our tool, SEAG, using the fastq file "Klf4.esc.fastq" and the mouse genome "GRCm38" as a reference. This benchmark aims to compare the performance of SEAG with that of BWA MEM, as mentioned in lab 5. Both tools generate separate SAM files, which we will evaluate for alignment with chromosome 17 and compare their genomic positions.
 
 In addition to the alignment analysis, we are measuring the runtime and memory usage of SEAG and BWA MEM. To measure runtime, we utilize the "time" command, while memory usage is monitored using the "top" command. We have also conducted tests on different terminals with varying amounts of RAM to observe potential performance differences.
