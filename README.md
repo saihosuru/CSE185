@@ -18,7 +18,7 @@ Sai Hosuru
 *Each author has played an equal role in the development of the software.*
 
 ### Usage
-$ python3 SEAG [refGenome.fa/.fasta] [fragments.fq/.fastq] (outputFileName.sam)
+```$ python3 SEAG [refGenome.fa/.fasta] [fragments.fq/.fastq] (outputFileName.sam)```
 
 ###### Inputs
 Reference genome (must be a fasta file ending in ".fa" or ".fasta")
@@ -34,7 +34,7 @@ pyfaidx - to read FASTA files and get sequences for each chromosome.
 
 ###### Installation Instructions
 In command line on UNIX, enter:
-"pip install pyfaidx"
+```$ pip install pyfaidx```
 
 ### Benchmarking
 We are currently conducting a benchmark analysis of our tool, SEAG, using the fastq file "Klf4.esc.fastq" and the mouse genome "GRCm38" as a reference. This benchmark aims to compare the performance of SEAG with that of BWA MEM, as mentioned in lab 5. Both tools generate separate SAM files, which we will evaluate for alignment with chromosome 17 and compare their genomic positions.
