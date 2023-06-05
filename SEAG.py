@@ -1,60 +1,40 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
-
 ################################################################################
+###                                  SEAG.py                                 ### 
+###                                                                          ###
 ### This file takes in either 2 or 3 files: a reference genome FASTA file    ###
-### (.fa, .fasta), and either one FASTQ file of reads or two FASTQ files in
-### the case of a paired-end reads. 
-###
-### The SAMGenerator outputs a tab-separated .sam file with details 
-### regarding all the alignments and all other details.
-###
-### Columns and fields:
-### 1. Query Name (type String)
-### 2. Record Flag (type int)
-### 3. Reference Name (type String)
-### 4. Position in the genome ()
-### 5. Mapping Quality (type int, Max 255)
-### 6. CIGAR string (type String)
-### 7. reference of next segment (type string)
-### 8. position of the next segment (type string)
-### 9. Observed length of template (type string)
-### 10. The actual sequence (type String)
-### 11. ASCII PHRED-encoded base qualities.
-###
+### (.fa, .fasta), and either one FASTQ file of reads or two FASTQ files in  ###
+### the case of a paired-end reads.                                          ###
+###                                                                          ###
+### The SAMGenerator outputs a tab-separated .sam file with details          ###
+### regarding all the alignments and all other details.                      ###
+###                                                                          ###
+### Columns and fields:                                                      ###
+### 1. Query Name (type String)                                              ###
+### 2. Record Flag (type int)                                                ###
+### 3. Reference Name (type String)                                          ###
+### 4. Position in the genome (type int)                                     ###
+### 5. Mapping Quality (type int, Max 255)                                   ###
+### 6. CIGAR string (type String)                                            ###
+### 7. reference of next segment (type string)                               ###
+### 8. position of the next segment (type string)                            ###
+### 9. Observed length of template (type string)                             ###
+### 10. The actual sequence (type String)                                    ###
+### 11. ASCII PHRED-encoded base qualities.                                  ###
+################################################################################
 
 
 
+'''
+import required packages
+'''
+import sys, argparse, os
+from pyfaidx import Fasta
 
 
 
-### SAM/BAM docs
-# https://seqan.readthedocs.io/en/seqan-v1.4.2/Tutorial/BasicSamBamIO.html#:~:text=SAM%20files%20are%20TSV%20(tab,followed%20by%20tab%2Dseparated%20tags.
-
-
-# In[4]:
-
-
-# Step: Check command line input, return error if not proper input
-#-G for genome .fa file 
-#Genome_File
-#-R - read fastq file 
-#Read_File
-# -RS - multiple read fastq files 
-#Read_File - list 
-
-# Usage:
-# python3 SAMGenerator.py <genome.fa/.fasta> <reads1.fq/.fastq> (reads2.fq/fastq)
-
-
-
-
-import sys, argparse
-#print(len(sys.argv))
-### Return error message if not appropriate arguments
+''' 
+Check required arguments. If not proper arguments, exit with error message.
+'''
 if not (len(sys.argv) == 3 or len(sys.argv) == 4):
     print("USAGE ERROR: appropriate number of input files not present.")
     print("Usage: python3 SAMGenerator.py <genome.fa/.fasta> <reads1.fq/.fastq> (outputfile.sam)")
@@ -65,24 +45,27 @@ if (len(sys.argv) == 4):
         print("USAGE ERROR: output file name does not end in \'.sam\'. ")
         print("Usage: python3 SAMGenerator.py <genome.fa/.fasta> <reads1.fq/.fastq> (outputfile.sam)")
         sys.exit(1)
-    
-#Copy filenames into an array of filenames to be opened sequentially
+
+
+
+
+
+
+'''
+Copy filenames into an array of filenames to be opened sequentially
+'''
 fqFiles = []
 for i in range(len(sys.argv)):
     fqFiles.append(sys.argv[i])
 
-        
-#genome file has been opened and initialized.
-#fastq files are not opened, but filenames are in array
-
-#Author: Srija
 
 
-# In[ ]:
 
 
-# Step: Check validity of files\
-import os 
+
+'''
+Check if all the files are of proper type.
+'''
 
 #Checks if the Genome file exists in the path 
 if not os.path.exists(fqFiles[1]):
@@ -90,7 +73,6 @@ if not os.path.exists(fqFiles[1]):
     sys.exit(1)
     
 #Checks if the Genome file ends with .fa to see if its a fasta file 
-
 if not (fqFiles[1].lower().endswith(".fasta") or fqFiles[1].lower().endswith(".fa")):
     print("Genome File is not a FASTA file.")
     sys.exit(1)
@@ -110,7 +92,9 @@ if not (fqFiles[2].lower().endswith(".fastq") or fqFiles[2].lower().endswith(".f
 print("Files are valid and they do exist.")
 
 
-# In[ ]:
+
+
+
 
 def TrieConstruction(Patterns):
     ''' 
@@ -129,6 +113,8 @@ def TrieConstruction(Patterns):
     #Initialize an empty collection of nodes
     Trie = {} 
     newNode = 0
+    
+    
     
     #For each string
     for element in Patterns:
@@ -192,7 +178,12 @@ def TrieConstruction(Patterns):
     return Trie
 
 
-# Step: Read Files
+
+
+
+
+#Open a file that will serve as the output of the software
+#Title the file either what the user wants or a default "output.sam"
 output = ''
 if (len(sys.argv) == 4):
     output = open(sys.argv[3], "w")
@@ -229,43 +220,43 @@ with open(fqFiles[2],"r") as file:
         quality = line4.rstrip()
         my_tuple = (header, sequence,quality)
         All_info.append(my_tuple)
+        
+        
     Answer=TrieConstruction(All_info)
-    #print(Answer)
+    
+    
+    
+    
+    
+    
+    
 
 
-# In[ ]:
-
-
-################################################################################
-
-
-# In[ ]:
-
-
-# Step: Generate Trie
-
-
-# In[ ]:
-
-
-# Step: Generate Alignment
-from pyfaidx import Fasta
+#Open the fasta genome file
 fa = str(fqFiles[1])
 fasta = Fasta(fa)
-chromos = fasta.keys()
-#print(chromos)
-chromosomes = []
-'''for key in chromos:
-    temp = key
-    if 'chr' in key:
-        temp = key.replace("chr","")
-    if len(temp) >= 3:
-        continue
-    else:
-        chromosomes.append(temp)
-'''
-chromosomes = chromos
+
+
+#Get access to each of the chromosomes in the fasta file
+#fasta.keys() returns an array of individual chromosomes.
+chromosomes = fasta.keys()
+
+#Create a MWT for string searching using .
 Aho_Trie = Answer
+
+
+
+'''This block of code's function can be summarized:
+The code sequentially checks every substring of set length
+in each chromosome. It then checks if the string is present
+in the MWT. If it is in the MWT, that means that was a read
+that was found in the genome. It marks that position in the
+genome for that specific read, then goes to the next position
+in the genome.
+
+It then outputs the details to the output file.
+
+'''
 for chro in chromosomes:
     sequence = str(fasta[chro])
     sequence = sequence.upper()
@@ -302,16 +293,9 @@ for chro in chromosomes:
         else:
             continue
 
+
+
+#close the output and fasta files.
 output.close()
 fasta.close()
-# In[ ]:
-
-
-# Step: Generate Values for the columns in the SAM file
-
-
-# In[ ]:
-
-
-# Step: Output columns to SAM file with proper formatting.
 
