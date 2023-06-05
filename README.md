@@ -48,4 +48,4 @@ python3 SEAG.py GRCm38.fa Klf4.esc.fastq (XXXX.sam)
 
 ```
 
-Please note that the benchmarking process may take approximately 7 to 8 hours to complete. If desired, you can run the command in the background using the "nohup" command. For a more comprehensive analysis of the results and the number of correct matches, please refer to the "Benchmark.ipynb" file.
+Please note that the above code may take approximately 7 to 8 hours to complete. If desired, you can run the command in the background using the "nohup" command. For a more comprehensive analysis of the results and the number of correct matches, please refer to the "Benchmark.ipynb" file.
