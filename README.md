@@ -18,7 +18,7 @@ Sai Hosuru
 *Each author has played an equal role in the development of the software.*
 
 ### Usage
-```$ python3 SEAG [refGenome.fa/.fasta] [fragments.fq/.fastq] (outputFileName.sam)```
+```$ python3 SEAG.py [refGenome.fa/.fasta] [fragments.fq/.fastq] (outputFileName.sam)```
 
 ###### Inputs
 Reference genome (must be a fasta file ending in ".fa" or ".fasta")
